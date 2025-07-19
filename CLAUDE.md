@@ -5,10 +5,10 @@ This is a dark-themed personal blog website built with pure HTML/CSS and deploye
 
 ## Technical Stack
 - **Frontend**: Pure HTML5 & CSS3 (no JavaScript framework)
-- **Hosting**: Cloudflare Workers/Pages
+- **Hosting**: Cloudflare Pages
 - **Domain**: rakshith.me
 - **Repository**: https://github.com/rakshithsajjan/rakshith.me
-- **Performance**: ~50ms load time globally
+- **Performance**: ~20-30ms load time globally
 
 ## Design Specifications
 - **Background**: #0f0f0f (near black)
@@ -24,9 +24,8 @@ This is a dark-themed personal blog website built with pure HTML/CSS and deploye
 ```
 /blog-cloudflare/
 ├── index.html          # Main homepage
-├── worker.js          # Cloudflare Worker script
-├── wrangler.toml      # Cloudflare config
-├── package.json       # Dependencies
+├── hero-image.jpg     # Hero section image
+├── package.json       # Dependencies (optional for Pages)
 ├── .gitignore         # Git ignore file
 └── CLAUDE.md          # This documentation
 ```
@@ -47,17 +46,8 @@ This is a dark-themed personal blog website built with pure HTML/CSS and deploye
 3. Created Cloudflare Worker configuration
 4. Set up GitHub repository: https://github.com/rakshithsajjan/rakshith.me
 
-### Cloudflare Workers Deployment
-```bash
-# Install dependencies
-npm install
-
-# Test locally
-npm run dev
-
-# Deploy to production
-npm run deploy
-```
+### Cloudflare Pages Deployment
+Pages automatically deploys when you push to GitHub. No manual deployment needed!
 
 ### Domain Configuration
 1. Domain `rakshith.me` added to Cloudflare
@@ -74,14 +64,14 @@ npm run deploy
 
 ### Making Changes
 1. Edit files locally (HTML/CSS)
-2. Test changes: `npm run dev` 
+2. Test locally by opening index.html in browser
 3. Commit and push:
    ```bash
    git add .
    git commit -m "Update description"
    git push
    ```
-4. Changes auto-deploy to rakshith.me within ~30 seconds
+4. Changes auto-deploy to rakshith.me within ~30 seconds via Pages
 
 ### Adding New Blog Posts
 1. Add new article element in `index.html`:
@@ -128,24 +118,23 @@ npm run deploy
 
 ## Commands Reference
 ```bash
-# Local development
-npm run dev
+# Test locally
+open index.html
 
-# Deploy to Cloudflare
-npm run deploy  
+# Push changes (auto-deploys)
+git add .
+git commit -m "Update"
+git push
 
-# View deployment logs
-npx wrangler tail
-
-# Update dependencies
-npm update
+# Check deployment status
+# Visit Cloudflare Dashboard → Pages → rakshith.me
 ```
 
 ## Troubleshooting
-- **Site not updating**: Check GitHub-Cloudflare connection
-- **Deployment fails**: Verify wrangler.toml configuration
-- **Domain issues**: Ensure DNS is pointing to Cloudflare
-- **Style changes not showing**: Clear browser cache
+- **Site not updating**: Check Pages deployment status in Cloudflare Dashboard
+- **Image not loading**: Ensure image files are committed to GitHub
+- **Domain issues**: Verify custom domain setup in Pages settings
+- **Style changes not showing**: Clear browser cache or use incognito mode
 
 ## Contact
 - GitHub: https://github.com/rakshithsajjan
