@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rakshith Sajjan</title>
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/hero-image.jpg" as="image" type="image/jpeg">
+    <!-- Preload critical resources with responsive hints -->
+    <link rel="preload" as="image" 
+          imagesrcset="/hero-640.webp 640w, /hero-1000.webp 1000w, /hero-1280.webp 1280w"
+          imagesizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1000px"
+          type="image/webp">
     
     <!-- DNS Prefetch for external resources if any -->
     <meta name="description" content="Rakshith Sajjan's personal blog - FAFO'ing around with web development, technology, and life.">
@@ -75,6 +78,7 @@
         }
 
         .hero-image {
+            position: relative;
             width: 100%;
             max-width: 1000px;
             margin: 0 auto 80px;
@@ -85,15 +89,67 @@
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             transform: translate3d(0, 0, 0);
+            /* Maintain aspect ratio to prevent layout shift */
+            aspect-ratio: 1000 / 563;
+            /* Inline blur placeholder - ultra small base64 */
+            background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAJABQDASIAAhEBAxEB/8AAFQABAQAAAAAAAAAAAAAAAAAAAAH/xAAWEAEBAQAAAAAAAAAAAAAAAAAAERP/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJdQBaIIP//Z');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        /* Progressive loading with blur transition */
+        .hero-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            filter: blur(20px);
+            transform: scale(1.1);
+            opacity: 1;
+            transition: opacity 0.4s ease-out;
+            z-index: 1;
+            border-radius: 20px;
         }
 
         .hero-image img {
+            position: relative;
+            z-index: 2;
             width: 100%;
             height: auto;
             display: block;
             /* Optimize rendering */
-            will-change: transform;
+            will-change: opacity;
             image-rendering: -webkit-optimize-contrast;
+            opacity: 0;
+            transition: opacity 0.4s ease-out;
+        }
+        
+        /* When image loads, hide blur */
+        .hero-image img.loaded {
+            opacity: 1;
+        }
+        
+        .hero-image.loaded::before {
+            opacity: 0;
+        }
+        
+        /* CSS-only load detection for modern browsers */
+        @supports (selector(:has(*))) {
+            .hero-image:has(img[src]) img {
+                animation: fadeIn 0.4s 0.1s forwards;
+            }
+            
+            @keyframes fadeIn {
+                to { opacity: 1; }
+            }
+            
+            .hero-image:has(img[src])::before {
+                animation: fadeOut 0.4s 0.1s forwards;
+            }
+            
+            @keyframes fadeOut {
+                to { opacity: 0; }
+            }
         }
 
         .blog-grid {
@@ -180,31 +236,35 @@
 
         <div class="hero-image">
             <picture>
-                <!-- WebP versions for modern browsers -->
-                <source type="image/webp" 
-                        media="(max-width: 640px)" 
-                        srcset="/hero-640.webp">
-                <source type="image/webp" 
-                        media="(max-width: 1280px)" 
-                        srcset="/hero-1280.webp">
-                <source type="image/webp" 
-                        srcset="/hero-1000.webp">
+                <!-- WebP versions - ordered from smallest to largest -->
+                <source type="image/webp"
+                        srcset="/hero-640.webp 640w,
+                                /hero-1000.webp 1000w,
+                                /hero-1280.webp 1280w"
+                        sizes="(max-width: 640px) 100vw,
+                               (max-width: 1280px) 100vw,
+                               1000px">
                 
                 <!-- JPEG fallbacks -->
-                <source type="image/jpeg" 
-                        media="(max-width: 640px)" 
-                        srcset="/hero-640.jpg">
-                <source type="image/jpeg" 
-                        media="(max-width: 1280px)" 
-                        srcset="/hero-1280.jpg">
+                <source type="image/jpeg"
+                        srcset="/hero-640.jpg 640w,
+                                /hero-1000.jpg 1000w,
+                                /hero-1280.jpg 1280w"
+                        sizes="(max-width: 640px) 100vw,
+                               (max-width: 1280px) 100vw,
+                               1000px">
                 
-                <!-- Default image -->
+                <!-- Default image with performance hints -->
                 <img src="/hero-1000.jpg" 
                      alt="Rakshith Sajjan" 
                      width="1000" 
                      height="563"
                      loading="eager" 
-                     decoding="async">
+                     decoding="async"
+                     fetchpriority="high"
+                     sizes="(max-width: 640px) 100vw,
+                            (max-width: 1280px) 100vw,
+                            1000px">
             </picture>
         </div>
 
@@ -231,5 +291,23 @@
             </article>
         </div>
     </div>
+    
+    <!-- Minimal JS fallback for progressive loading -->
+    <script>
+    if (!CSS.supports('selector(:has(*))')) {
+        const img = document.querySelector('.hero-image img');
+        if (img) {
+            if (img.complete) {
+                img.classList.add('loaded');
+                img.parentElement.classList.add('loaded');
+            } else {
+                img.onload = () => {
+                    img.classList.add('loaded');
+                    img.parentElement.classList.add('loaded');
+                };
+            }
+        }
+    }
+    </script>
 </body>
 </html>
