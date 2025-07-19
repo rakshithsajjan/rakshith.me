@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rakshith Sajjan</title>
     
-    <!-- Preload critical resources with responsive hints -->
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/hero-1280.webp" as="image" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" 
           imagesrcset="/hero-640.webp 640w, /hero-1000.webp 1000w, /hero-1280.webp 1280w"
-          imagesizes="(max-width: 640px) 100vw, (max-width: 1280px) 100vw, 1000px"
+          imagesizes="100vw"
           type="image/webp">
     
     <!-- DNS Prefetch for external resources if any -->
@@ -30,6 +31,7 @@
             color: #ffffff;
             line-height: 1.6;
             min-height: 100vh;
+            margin: 0;
         }
 
         .container {
@@ -38,29 +40,55 @@
             padding: 0 20px;
         }
 
-        header {
+        /* Hero Section with full-width image */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            min-height: 500px;
+            overflow: hidden;
+        }
+
+        /* Hero text overlay */
+        .hero-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
-            padding: 80px 0 40px;
+            z-index: 10;
+            width: 100%;
+            padding: 0 20px;
         }
 
         h1 {
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: 700;
             margin-bottom: 10px;
             letter-spacing: -2px;
+            color: #ffffff;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7),
+                         0 4px 20px rgba(0, 0, 0, 0.5);
         }
 
         .tagline {
-            font-size: 1.25rem;
-            color: #999;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
             font-weight: 300;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
         }
 
         nav {
             display: flex;
             justify-content: center;
             gap: 40px;
-            margin: 60px 0;
+            padding: 30px 0;
+            background-color: rgba(15, 15, 15, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         nav a {
@@ -78,19 +106,11 @@
         }
 
         .hero-image {
-            position: relative;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 1000px;
-            margin: 0 auto 80px;
-            display: block;
-            border-radius: 20px;
-            overflow: hidden;
-            /* Fix flickering */
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            transform: translate3d(0, 0, 0);
-            /* Maintain aspect ratio to prevent layout shift */
-            aspect-ratio: 1000 / 563;
+            height: 100%;
             /* Inline blur placeholder - ultra small base64 */
             background-image: url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAJABQDASIAAhEBAxEB/8AAFQABAQAAAAAAAAAAAAAAAAAAAAH/xAAWEAEBAQAAAAAAAAAAAAAAAAAAERP/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJdQBaIIP//Z');
             background-size: cover;
@@ -104,24 +124,37 @@
             inset: 0;
             background: inherit;
             filter: blur(20px);
-            transform: scale(1.1);
+            transform: scale(1.05);
             opacity: 1;
             transition: opacity 0.4s ease-out;
             z-index: 1;
-            border-radius: 20px;
+        }
+        
+        /* Dark overlay for better text readability */
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, 
+                rgba(0, 0, 0, 0.3) 0%, 
+                rgba(0, 0, 0, 0.5) 50%,
+                rgba(0, 0, 0, 0.7) 100%);
+            z-index: 2;
         }
 
         .hero-image img {
-            position: relative;
-            z-index: 2;
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
+            object-fit: cover;
             /* Optimize rendering */
             will-change: opacity;
             image-rendering: -webkit-optimize-contrast;
             opacity: 0;
             transition: opacity 0.4s ease-out;
+            z-index: 0;
         }
         
         /* When image loads, hide blur */
@@ -205,9 +238,23 @@
             text-decoration: underline;
         }
 
+        /* Main content section */
+        .main-content {
+            margin-top: 40px;
+        }
+        
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.5rem;
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .hero-section {
+                height: 60vh;
+                min-height: 400px;
             }
             
             nav {
@@ -221,53 +268,50 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Rakshith Sajjan</h1>
-            <p class="tagline">FAFO'ing around ;)</p>
-        </header>
-
-        <nav>
-            <a href="/" class="active">Home</a>
-            <a href="/blog">Blog</a>
-            <a href="/categories">Categories</a>
-            <a href="/tags">Tags</a>
-        </nav>
-
+    <!-- Hero Section with Full-width Image -->
+    <div class="hero-section">
         <div class="hero-image">
             <picture>
-                <!-- WebP versions - ordered from smallest to largest -->
+                <!-- WebP versions for full-width hero -->
                 <source type="image/webp"
                         srcset="/hero-640.webp 640w,
                                 /hero-1000.webp 1000w,
                                 /hero-1280.webp 1280w"
-                        sizes="(max-width: 640px) 100vw,
-                               (max-width: 1280px) 100vw,
-                               1000px">
+                        sizes="100vw">
                 
                 <!-- JPEG fallbacks -->
                 <source type="image/jpeg"
                         srcset="/hero-640.jpg 640w,
                                 /hero-1000.jpg 1000w,
                                 /hero-1280.jpg 1280w"
-                        sizes="(max-width: 640px) 100vw,
-                               (max-width: 1280px) 100vw,
-                               1000px">
+                        sizes="100vw">
                 
                 <!-- Default image with performance hints -->
-                <img src="/hero-1000.jpg" 
+                <img src="/hero-1280.jpg" 
                      alt="Rakshith Sajjan" 
-                     width="1000" 
-                     height="563"
                      loading="eager" 
                      decoding="async"
-                     fetchpriority="high"
-                     sizes="(max-width: 640px) 100vw,
-                            (max-width: 1280px) 100vw,
-                            1000px">
+                     fetchpriority="high">
             </picture>
         </div>
+        
+        <!-- Hero Content Overlay -->
+        <div class="hero-content">
+            <h1>Rakshith Sajjan</h1>
+            <p class="tagline">FAFO'ing around ;)</p>
+        </div>
+    </div>
 
+    <!-- Navigation -->
+    <nav>
+        <a href="/" class="active">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/categories">Categories</a>
+        <a href="/tags">Tags</a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-content">
         <div class="blog-grid">
             <article class="blog-post" onclick="window.location.href='/post/getting-started'">
                 <h2>Getting Started with Web Development</h2>
