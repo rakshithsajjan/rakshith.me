@@ -135,12 +135,12 @@ function getCacheControl(pathname) {
     };
   }
   
-  // HTML - cache for 5 minutes with revalidation
+  // HTML - no cache to ensure fresh content
   if (pathname.endsWith('.html') || pathname === '/') {
     return {
-      browserTTL: 300, // 5 minutes
-      edgeTTL: 300,
-      header: 'public, max-age=300, must-revalidate'
+      browserTTL: 0,
+      edgeTTL: 60, // 1 minute edge cache
+      header: 'no-cache, must-revalidate'
     };
   }
   
