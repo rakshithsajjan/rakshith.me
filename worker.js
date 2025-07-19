@@ -2,8 +2,8 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
 import manifestJSON from '__STATIC_CONTENT_MANIFEST';
 const assetManifest = JSON.parse(manifestJSON);
 
-// Tiny 20x11 base64 blur placeholder for hero image (generated from original)
-const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEB//EACQQAAIBAwMEAwAAAAAAAAAAAAECAwAEEQUSITFBUWEGE3H/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABcRAAMBAAAAAAAAAAAAAAAAAAABAhH/2gAMAwEAAhEDEQA/AJ7vTxLcmSCTMMpJKZ/DwaVaXtlppW3aQM55wM8VDqesz3DKkBMduD9ajoB3P3NY2trvO5sZByRWOpmnBU6P/9k=';
+// Ultra-tiny 20px blur placeholder for hero image (under 1KB)
+const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/4QKcRXhpZgAATU0AKgAAAAgACQEPAAIAAAAIAAAAegEQAAIAAAAJAAAAggESAAMAAAABAAEAAAEaAAUAAAABAAAAjAEbAAUAAAABAAAAlAEoAAMAAAABAAIAAAExAAIAAAAOAAAAnAEyAAIAAAAUAAAAqodpAAQAAAABAAAAvgAAAABzYW1zdW5nAFNNLVM5MDhFAAAAAABIAAAAAQAAAEgAAAABUzkwOEVYWFNDRllFMwAyMDI1OjA3OjE5IDE1OjM5OjI3AAAcgpoABQAAAAEAAAIUgp0ABQAAAAEAAAIciCIAAwAAAAEAAgAAiCcAAwAAAAEADAAAkAAABwAAAAQwMjIwkAMAAgAAABQAAAIkkAQAAgAAABQAAAI4kBAAAgAAAAcAAAJMkBEAAgAAAAcAAAJUkgEACgAAAAEAAAJckgIABQAAAAEAAAJkkgMACgAAAAEAAAJskgQACgAAAAEAAAJ0kgUABQAAAAEAAAJ8kgcAAwAAAAEAAgAAkgkAAwAAAAEAAAAAkgoABQAAAAEAAAKEkpAAAgAAAAQ4OTUAkpEAAgAAAAQ4OTUAkpIAAgAAAAQ4OTUAoAAABwAAAAQwMTAwoAIABAAAAAEAAAZAoAMABAAAAAEAAALrpAIAAwAAAAEAAAAApAMAAwAAAAEAAAAApAQABQAAAAEAAAKMpAUAAwAAAAEAFwAApAYAAwAAAAEAAAAAAAAAAAAABLEAGK13AAAACQAAAAUyMDI1OjA2OjE5IDE1OjE3OjE3ADIwMjU6MDY6MTkgMTU6MTc6MTcAKzA1OjMwAAArMDU6MzAAAAAABLEAGK13AAAAqQAAAGQAAAHrAAAAMgAAAAAAAAABAAAAqQAAAGQAAAAgAAAABQAAAAIAAAAB/+IB2ElDQ19QUk9GSUxFAAEBAAAByAAAAAAEMAAAbW50clJHQiBYWVogB+AAAQABAAAAAAAAYWNzcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPbWAAEAAAAA0y0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJZGVzYwAAAPAAAAAkclhZWgAAARQAAAAUZ1hZWgAAASgAAAAUYlhZWgAAATwAAAAUd3RwdAAAAVAAAAAUclRSQwAAAWQAAAAoZ1RSQwAAAWQAAAAoYlRSQwAAAWQAAAAoY3BydAAAAYwAAAA8bWx1YwAAAAAAAAABAAAADGVuVVMAAAAIAAAAHABzAFIARwBCWFlaIAAAAAAAAG+iAAA49QAAA5BYWVogAAAAAAAAYpkAALeFAAAY2lhZWiAAAAAAAAAkoAAAD4QAALbPWFlaIAAAAAAAAPbWAAEAAAAA0y1wYXJhAAAAAAAEAAAAAmZmAADypwAADVkAABPQAAAKWwAAAAAAAAAAbWx1YwAAAAAAAAABAAAADGVuVVMAAAAgAAAAHABHAG8AbwBnAGwAZQAgAEkAbgBjAC4AIAAyADAAMQA2/9sAQwD///////r//////////////////////////////////////////////////////////////////////////////9sAQwH//////////////////////////////////////////////////////////////////////////////////////8AAEQgACQAUAwEiAAIRAQMRAf/EABUAAQEAAAAAAAAAAAAAAAAAAAAB/8QAFhABAQEAAAAAAAAAAAAAAAAAABEB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwBS6gC0QQf/2Q==';
 
 export default {
   async fetch(request, env, ctx) {
@@ -12,36 +12,7 @@ export default {
     const url = new URL(request.url);
     
     try {
-      // Handle image resize requests
-      if (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png')) {
-        const width = url.searchParams.get('w');
-        if (width) {
-          // For now, we'll serve the same image but with optimized caching
-          // In production, you'd use Cloudflare Image Resizing or generate different sizes
-          url.searchParams.delete('w');
-          const response = await getAssetFromKV(
-            {
-              request: new Request(url.toString()),
-              waitUntil: ctx.waitUntil.bind(ctx),
-            },
-            {
-              ASSET_NAMESPACE: env.__STATIC_CONTENT,
-              ASSET_MANIFEST: assetManifest,
-              cacheControl: {
-                browserTTL: 31536000, // 1 year
-                edgeTTL: 31536000,
-                bypassCache: false,
-              },
-            }
-          );
-          
-          const newResponse = new Response(response.body, response);
-          newResponse.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-          newResponse.headers.set('Vary', 'Accept, Width');
-          newResponse.headers.set('X-Requested-Width', width);
-          return newResponse;
-        }
-      }
+      // No need for resize handling anymore - we have pre-generated sizes
       
       // Add trailing slash to directory requests
       if (!url.pathname.includes('.') && !url.pathname.endsWith('/')) {
