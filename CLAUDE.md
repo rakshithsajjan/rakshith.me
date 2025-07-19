@@ -102,13 +102,211 @@ Pages automatically deploys when you push to GitHub. No manual deployment needed
 - Gzip compression enabled
 - Total size: ~15KB
 
+## Blog System
+
+### Overview
+The blog uses a simple HTML-only approach - no JavaScript, no build process, just plain HTML files.
+
+### Blog Structure
+```
+/public/
+  /blog/
+    index.html         # Blog listing page
+    template.html      # Template for new posts
+    getting-started.html  # Example post
+    [your-posts].html  # Your blog posts
+```
+
+### Creating a New Blog Post
+
+#### Method 1: Manual Creation
+1. Copy the template: `cp public/blog/template.html public/blog/new-post-name.html`
+2. Edit the HTML file with your content
+3. Update `/blog/index.html` to add the post to the listing
+4. Update navigation links in adjacent posts
+5. Deploy: `wrangler deploy`
+
+#### Method 2: Converting Text to Blog Post
+When you give me a blob of text to convert to a blog post, I will:
+
+1. **Create the HTML file** with proper formatting:
+   - Convert paragraphs to `<p>` tags
+   - Create headings from text structure
+   - Format lists properly
+   - Add code blocks with syntax highlighting CSS
+   - Ensure proper spacing and typography
+
+2. **Add metadata**:
+   - Title in `<title>` and `<h1>` tags
+   - Meta description for SEO
+   - Date of publication
+   - Proper navigation links
+
+3. **Update the blog index** automatically
+
+4. **Update homepage** if needed (latest 3 posts)
+
+Just tell me: "Convert this to a blog post: [your text]" and I'll handle everything!
+
+### Adding Images to Blog Posts
+
+#### Option 1: Local Images (Recommended)
+1. Add images to `/public/images/` directory
+2. In your blog post HTML:
+```html
+<img src="/images/your-image.jpg" alt="Description of image" loading="lazy">
+```
+
+For responsive images:
+```html
+<picture>
+    <source srcset="/images/your-image.webp" type="image/webp">
+    <img src="/images/your-image.jpg" alt="Description" loading="lazy">
+</picture>
+```
+
+#### Option 2: External Images
+```html
+<img src="https://example.com/image.jpg" alt="Description" loading="lazy">
+```
+
+#### Image Styling
+The blog CSS already includes basic image styling:
+```css
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+```
+
+For centered images with captions:
+```html
+<figure style="text-align: center;">
+    <img src="/images/screenshot.png" alt="Screenshot description">
+    <figcaption style="color: #666; font-size: 0.9em; margin-top: 10px;">
+        Caption text here
+    </figcaption>
+</figure>
+```
+
+### Blog Post Best Practices
+
+1. **File Naming**: Use kebab-case: `my-awesome-post.html`
+2. **Titles**: Keep under 60 characters for SEO
+3. **Excerpts**: Write compelling 1-2 sentence summaries
+4. **Images**: 
+   - Optimize before uploading (use WebP when possible)
+   - Always include alt text
+   - Keep under 200KB per image
+5. **Code Blocks**: Use `<pre><code>` for multi-line code
+6. **Links**: Use descriptive anchor text, not "click here"
+
+### Common HTML Elements for Blog Posts
+
+```html
+<!-- Paragraph -->
+<p>Your text here...</p>
+
+<!-- Headings -->
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+
+<!-- Bold text -->
+<strong>Important text</strong>
+
+<!-- Italic text -->
+<em>Emphasized text</em>
+
+<!-- Links -->
+<a href="https://example.com">Link text</a>
+
+<!-- Unordered list -->
+<ul>
+    <li>First item</li>
+    <li>Second item</li>
+</ul>
+
+<!-- Ordered list -->
+<ol>
+    <li>First step</li>
+    <li>Second step</li>
+</ol>
+
+<!-- Code inline -->
+<code>const variable = 'value';</code>
+
+<!-- Code block -->
+<pre><code>function example() {
+    return 'Hello World';
+}</code></pre>
+
+<!-- Blockquote -->
+<blockquote style="border-left: 3px solid #4a9eff; padding-left: 20px; margin: 20px 0; color: #999;">
+    <p>Quote text here...</p>
+</blockquote>
+
+<!-- Horizontal rule -->
+<hr style="border: 0; border-top: 1px solid #2a2a2a; margin: 40px 0;">
+```
+
+### Quick Copy-Paste Blog Post Structure
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Title - Rakshith Sajjan</title>
+    <meta name="description" content="Brief description for SEO">
+    
+    <style>
+        /* Copy from template.html */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/blog/" class="back-link">← Back to Blog</a>
+        </header>
+
+        <article>
+            <h1>Your Title</h1>
+            <div class="post-meta">January 20, 2025</div>
+
+            <div class="post-content">
+                <p>Introduction paragraph...</p>
+
+                <h2>First Section</h2>
+                <p>Content...</p>
+
+                <img src="/images/example.jpg" alt="Description" loading="lazy">
+
+                <h2>Second Section</h2>
+                <p>More content...</p>
+
+                <pre><code>// Code example
+console.log('Hello');</code></pre>
+            </div>
+        </article>
+
+        <nav class="post-nav">
+            <a href="/blog/previous.html">← Previous Post</a>
+            <a href="/blog/next.html">Next Post →</a>
+        </nav>
+    </div>
+</body>
+</html>
+```
+
 ## Future Enhancements
-- Individual blog post pages
-- RSS feed
-- Dark/light theme toggle
-- Blog categories/tags
-- Search functionality (if needed)
-- Comments system (optional)
+- RSS feed (generate static XML file)
+- Dark/light theme toggle (CSS custom properties)
+- Blog categories/tags (separate HTML pages)
+- Search functionality (would need JavaScript)
+- Comments system (3rd party service like Disqus)
 
 ## Maintenance Notes
 - Monitor Cloudflare analytics for performance
