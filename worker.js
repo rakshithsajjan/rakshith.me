@@ -1,0 +1,199 @@
+const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rakshith Sajjan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 80px 0 40px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -2px;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: #999;
+            font-weight: 300;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+        }
+
+        nav a:hover, nav a.active {
+            color: #4a9eff;
+            border-bottom-color: #4a9eff;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto 80px;
+            display: block;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        .blog-post {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.2);
+        }
+
+        .blog-post h2 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .blog-post .date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .blog-post p {
+            color: #ccc;
+            line-height: 1.7;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4a9eff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .read-more:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            nav {
+                gap: 20px;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Rakshith Sajjan</h1>
+            <p class="tagline">FAFO'ing around ;)</p>
+        </header>
+
+        <nav>
+            <a href="/" class="active">Home</a>
+            <a href="/blog">Blog</a>
+            <a href="/categories">Categories</a>
+            <a href="/tags">Tags</a>
+        </nav>
+
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=600&fit=crop" alt="Mountain landscape">
+        </div>
+
+        <div class="blog-grid">
+            <article class="blog-post" onclick="window.location.href='/post/getting-started'">
+                <h2>Getting Started with Web Development</h2>
+                <p class="date">January 19, 2025</p>
+                <p>Learn the fundamentals of building fast, modern websites using just HTML and CSS. No frameworks needed!</p>
+                <a href="/post/getting-started" class="read-more">Read more →</a>
+            </article>
+
+            <article class="blog-post" onclick="window.location.href='/post/cloudflare-workers'">
+                <h2>Deploying to Cloudflare Workers</h2>
+                <p class="date">January 18, 2025</p>
+                <p>How to deploy your static site to Cloudflare Workers for blazing fast global performance.</p>
+                <a href="/post/cloudflare-workers" class="read-more">Read more →</a>
+            </article>
+
+            <article class="blog-post" onclick="window.location.href='/post/dark-mode'">
+                <h2>Building a Dark Mode Blog</h2>
+                <p class="date">January 17, 2025</p>
+                <p>Creating a beautiful dark-themed blog that's easy on the eyes and looks professional.</p>
+                <a href="/post/dark-mode" class="read-more">Read more →</a>
+            </article>
+        </div>
+    </div>
+</body>
+</html>`;
+
+export default {
+  async fetch(request, env, ctx) {
+    return new Response(html, {
+      headers: {
+        'content-type': 'text/html;charset=UTF-8',
+        'cache-control': 'public, max-age=3600',
+      },
+    });
+  },
+};
