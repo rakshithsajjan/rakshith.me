@@ -4,11 +4,12 @@
 This is a dark-themed personal blog website built with pure HTML/CSS and deployed on Cloudflare Workers/Pages. The site features a modern, minimalist design with excellent performance.
 
 ## Technical Stack
-- **Frontend**: Pure HTML5 & CSS3 (no JavaScript framework)
-- **Hosting**: Cloudflare Pages
+- **Frontend**: Pure HTML5 & CSS3 (minimal JavaScript for fallback)
+- **Hosting**: Cloudflare Workers with KV Storage
 - **Domain**: rakshith.me
 - **Repository**: https://github.com/rakshithsajjan/rakshith.me
 - **Performance**: ~20-30ms load time globally
+- **Image Loading**: Advanced progressive loading with blur placeholders
 
 ## Design Specifications
 - **Background**: #0f0f0f (near black)

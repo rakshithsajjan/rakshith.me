@@ -2,6 +2,9 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
 import manifestJSON from '__STATIC_CONTENT_MANIFEST';
 const assetManifest = JSON.parse(manifestJSON);
 
+// Tiny 20x11 base64 blur placeholder for hero image (generated from original)
+const HERO_BLUR = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEB//EACQQAAIBAwMEAwAAAAAAAAAAAAECAwAEEQUSITFBUWEGE3H/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABcRAAMBAAAAAAAAAAAAAAAAAAABAhH/2gAMAwEAAhEDEQA/AJ7vTxLcmSCTMMpJKZ/DwaVaXtlppW3aQM55wM8VDqesz3DKkBMduD9ajoB3P3NY2trvO5sZByRWOpmnBU6P/9k=';
+
 export default {
   async fetch(request, env, ctx) {
     const startTime = Date.now();
@@ -9,6 +12,37 @@ export default {
     const url = new URL(request.url);
     
     try {
+      // Handle image resize requests
+      if (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.png')) {
+        const width = url.searchParams.get('w');
+        if (width) {
+          // For now, we'll serve the same image but with optimized caching
+          // In production, you'd use Cloudflare Image Resizing or generate different sizes
+          url.searchParams.delete('w');
+          const response = await getAssetFromKV(
+            {
+              request: new Request(url.toString()),
+              waitUntil: ctx.waitUntil.bind(ctx),
+            },
+            {
+              ASSET_NAMESPACE: env.__STATIC_CONTENT,
+              ASSET_MANIFEST: assetManifest,
+              cacheControl: {
+                browserTTL: 31536000, // 1 year
+                edgeTTL: 31536000,
+                bypassCache: false,
+              },
+            }
+          );
+          
+          const newResponse = new Response(response.body, response);
+          newResponse.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+          newResponse.headers.set('Vary', 'Accept, Width');
+          newResponse.headers.set('X-Requested-Width', width);
+          return newResponse;
+        }
+      }
+      
       // Add trailing slash to directory requests
       if (!url.pathname.includes('.') && !url.pathname.endsWith('/')) {
         return Response.redirect(url.href + '/', 301);
@@ -46,8 +80,93 @@ export default {
         }
       );
 
-      // Clone response to add custom headers
-      const newResponse = new Response(response.body, response);
+      // Clone response to potentially modify HTML
+      let body = response.body;
+      let contentType = response.headers.get('content-type') || '';
+      
+      // If it's HTML, inject our progressive loading enhancements
+      if (contentType.includes('text/html')) {
+        const text = await response.text();
+        // Inject blur placeholder and enhanced CSS for progressive loading
+        body = text.replace('</head>', `
+    <style>
+      /* Progressive Image Loading */
+      .hero-image {
+        position: relative;
+        background-image: url('${HERO_BLUR}');
+        background-size: cover;
+        background-position: center;
+        filter: blur(0);
+        transition: filter 0.3s ease-out;
+      }
+      
+      .hero-image::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: inherit;
+        filter: blur(20px);
+        transform: scale(1.1);
+        opacity: 1;
+        transition: opacity 0.4s ease-out;
+        z-index: 1;
+      }
+      
+      .hero-image img {
+        position: relative;
+        z-index: 2;
+        opacity: 0;
+        transition: opacity 0.4s ease-out;
+      }
+      
+      .hero-image img.loaded {
+        opacity: 1;
+      }
+      
+      .hero-image.loaded::before {
+        opacity: 0;
+      }
+      
+      /* Pure CSS loading detection */
+      @supports (animation: 1s) {
+        .hero-image img {
+          animation: checkload 0.1s 0.1s forwards;
+        }
+        
+        @keyframes checkload {
+          to { opacity: 1; }
+        }
+        
+        .hero-image:has(img[src]) {
+          background-image: none;
+        }
+        
+        .hero-image:has(img[src])::before {
+          opacity: 0;
+        }
+      }
+    </style>
+    <script>
+      // Minimal JS for browsers without :has() support
+      if (!CSS.supports('selector(:has(*))')) {
+        document.addEventListener('DOMContentLoaded', () => {
+          const img = document.querySelector('.hero-image img');
+          if (img.complete) {
+            img.classList.add('loaded');
+            img.parentElement.classList.add('loaded');
+          } else {
+            img.onload = () => {
+              img.classList.add('loaded');
+              img.parentElement.classList.add('loaded');
+            };
+          }
+        });
+      }
+    </script>
+</head>`);
+      }
+      
+      const newResponse = new Response(body, response);
       
       // Add performance and security headers
       newResponse.headers.set('Cache-Control', cacheControl.header);
