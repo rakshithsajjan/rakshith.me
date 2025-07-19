@@ -1,0 +1,28 @@
+name = "rakshith-blog"
+main = "worker.js"
+compatibility_date = "2025-01-19"
+
+# Custom domain routes
+routes = [
+  { pattern = "rakshith.me/*", custom_domain = true },
+  { pattern = "www.rakshith.me/*", custom_domain = true }
+]
+
+# Workers Sites configuration
+[site]
+bucket = "./public"
+
+# Performance settings
+[limits]
+cpu_ms = 50
+
+# Development settings
+[dev]
+port = 8787
+local_protocol = "http"
+
+# Environment-specific settings
+[env.production]
+# Production optimizations
+[env.production.performance]
+cache_everything = true

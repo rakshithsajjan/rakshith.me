@@ -1,0 +1,14 @@
+{
+  "name": "rakshith-blog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler dev"
+  },
+  "devDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.3.4",
+    "wrangler": "^3.0.0"
+  }
+}
