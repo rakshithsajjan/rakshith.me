@@ -145,6 +145,19 @@ export default {
       newResponse.headers.set('X-Frame-Options', 'DENY');
       newResponse.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
       
+      // Add Expires header for Pingdom
+      const expires = new Date();
+      if (isImage(url.pathname)) {
+        expires.setFullYear(expires.getFullYear() + 1);
+      } else if (url.pathname.endsWith('.css') || url.pathname.endsWith('.js')) {
+        expires.setFullYear(expires.getFullYear() + 1);
+      } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
+        expires.setMinutes(expires.getMinutes() + 5);
+      } else {
+        expires.setDate(expires.getDate() + 7);
+      }
+      newResponse.headers.set('Expires', expires.toUTCString());
+      
       // Add image optimization hints for browsers
       if (isImage(url.pathname)) {
         newResponse.headers.set('Accept-CH', 'DPR, Width, Viewport-Width');
@@ -189,38 +202,38 @@ export default {
 
 // Intelligent cache control based on file type
 function getCacheControl(pathname) {
-  // Images - cache for 1 year with revalidation
+  // Images - cache for 1 year with immutable
   if (isImage(pathname)) {
     return {
       browserTTL: 31536000, // 1 year
       edgeTTL: 31536000,
-      header: 'public, max-age=31536000, stale-while-revalidate=86400'
+      header: 'public, max-age=31536000, immutable'
     };
   }
   
-  // CSS/JS - cache for 1 month
+  // CSS/JS - cache for 1 year (since we have versioned filenames)
   if (pathname.endsWith('.css') || pathname.endsWith('.js')) {
     return {
-      browserTTL: 2592000, // 30 days
-      edgeTTL: 2592000,
-      header: 'public, max-age=2592000, stale-while-revalidate=86400'
+      browserTTL: 31536000, // 1 year
+      edgeTTL: 31536000,
+      header: 'public, max-age=31536000, immutable'
     };
   }
   
-  // HTML - cache for 1 hour with revalidation
+  // HTML - cache for 5 minutes with revalidation
   if (pathname.endsWith('.html') || pathname === '/') {
     return {
-      browserTTL: 3600, // 1 hour
-      edgeTTL: 3600,
-      header: 'public, max-age=3600, stale-while-revalidate=300'
+      browserTTL: 300, // 5 minutes
+      edgeTTL: 300,
+      header: 'public, max-age=300, must-revalidate'
     };
   }
   
-  // Default - cache for 1 day
+  // Default - cache for 1 week
   return {
-    browserTTL: 86400,
-    edgeTTL: 86400,
-    header: 'public, max-age=86400'
+    browserTTL: 604800, // 1 week
+    edgeTTL: 604800,
+    header: 'public, max-age=604800'
   };
 }
 
