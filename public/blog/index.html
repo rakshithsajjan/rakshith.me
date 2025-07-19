@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Rakshith Sajjan</title>
+    <meta name="description" content="Thoughts on web development, technology, and life by Rakshith Sajjan">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 60px 0 40px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .back-link {
+            color: #4a9eff;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        .blog-list {
+            margin-bottom: 80px;
+        }
+
+        .blog-entry {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .blog-entry:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.2);
+        }
+
+        .blog-entry h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .blog-date {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .blog-excerpt {
+            color: #ccc;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+
+        .read-more {
+            color: #4a9eff;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .blog-entry h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/" class="back-link">← Back to Home</a>
+            <h1>Blog</h1>
+        </header>
+
+        <div class="blog-list">
+            <a href="/blog/getting-started.html" class="blog-entry">
+                <h2>Getting Started with Web Development</h2>
+                <p class="blog-date">January 19, 2025</p>
+                <p class="blog-excerpt">Learn the fundamentals of building fast, modern websites using just HTML and CSS. No frameworks needed!</p>
+                <span class="read-more">Read more →</span>
+            </a>
+
+            <a href="/blog/cloudflare-workers.html" class="blog-entry">
+                <h2>Deploying to Cloudflare Workers</h2>
+                <p class="blog-date">January 18, 2025</p>
+                <p class="blog-excerpt">How to deploy your static site to Cloudflare Workers for blazing fast global performance.</p>
+                <span class="read-more">Read more →</span>
+            </a>
+
+            <a href="/blog/dark-mode.html" class="blog-entry">
+                <h2>Building a Dark Mode Blog</h2>
+                <p class="blog-date">January 17, 2025</p>
+                <p class="blog-excerpt">Creating a beautiful dark-themed blog that's easy on the eyes and looks professional.</p>
+                <span class="read-more">Read more →</span>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

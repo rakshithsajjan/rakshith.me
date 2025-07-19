@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building a Dark Mode Blog - Rakshith Sajjan</title>
+    <meta name="description" content="Creating a beautiful dark-themed blog that's easy on the eyes and looks professional.">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="/">Rakshith Sajjan</a></h1>
+            <p class="tagline">FAFO'ing around ;)</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog.html">Blog</a>
+            </nav>
+        </header>
+
+        <main>
+            <article>
+                <h1>Building a Dark Mode Blog</h1>
+                <div class="meta">
+                    <time datetime="2025-01-17">January 17, 2025</time>
+                </div>
+                
+                <p>Dark mode has become more than just a trend - it's a necessity for many developers and readers who spend hours looking at screens. Today, let's explore how to create a beautiful dark-themed blog using only CSS.</p>
+
+                <h2>Why Dark Mode?</h2>
+                
+                <p>Beyond looking sleek and modern, dark mode offers real benefits:</p>
+                
+                <ul>
+                    <li>Reduced eye strain in low-light environments</li>
+                    <li>Better battery life on OLED screens</li>
+                    <li>Enhanced focus on content</li>
+                    <li>Professional, modern aesthetic</li>
+                </ul>
+
+                <h2>Color Palette Selection</h2>
+                
+                <p>The key to a good dark theme isn't just inverting colors. You need carefully chosen shades that work together:</p>
+                
+                <pre><code>:root {
+  --bg-primary: #0f0f0f;
+  --bg-secondary: #1a1a1a;
+  --text-primary: #ffffff;
+  --text-secondary: #ccc;
+  --text-muted: #666;
+  --accent: #4a9eff;
+}</code></pre>
+
+                <p>Notice how we avoid pure black (#000000) for the background. This reduces contrast and is easier on the eyes.</p>
+
+                <h2>Typography Considerations</h2>
+                
+                <p>Text needs special attention in dark mode:</p>
+                
+                <ol>
+                    <li>Use slightly lower contrast than pure white on black</li>
+                    <li>Increase line-height for better readability</li>
+                    <li>Consider slightly lighter font weights</li>
+                    <li>Ensure adequate spacing between elements</li>
+                </ol>
+
+                <h2>Creating Visual Hierarchy</h2>
+                
+                <p>In dark mode, you can't rely on shadows as much. Instead, use:</p>
+                
+                <pre><code>.card {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}</code></pre>
+
+                <p>Subtle borders and background color variations create depth without harsh contrasts.</p>
+
+                <h2>Syntax Highlighting</h2>
+                
+                <p>Code blocks need special attention in dark themes. Choose colors that are vibrant enough to distinguish syntax but not so bright they hurt the eyes:</p>
+                
+                <pre><code>pre {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+}</code></pre>
+
+                <h2>Testing Your Dark Theme</h2>
+                
+                <p>Always test your dark theme in different conditions:</p>
+                
+                <ul>
+                    <li>Bright daylight (increase contrast if needed)</li>
+                    <li>Complete darkness (reduce brightness)</li>
+                    <li>Different screen types (OLED vs LCD)</li>
+                    <li>With night shift/flux enabled</li>
+                </ul>
+
+                <p>Remember, a good dark theme should be comfortable to read for extended periods. If your eyes feel strained after 10 minutes, adjust your colors.</p>
+            </article>
+
+            <nav class="post-nav">
+                <span></span>
+                <a href="/posts/2025-01-18-cloudflare-workers.html">Next: Deploying to Cloudflare Workers →</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Rakshith Sajjan. Built with HTML & CSS.</p>
+        </footer>
+    </div>
+</body>
+</html>

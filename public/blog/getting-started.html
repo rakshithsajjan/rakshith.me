@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with Web Development - Rakshith Sajjan</title>
+    <meta name="description" content="Learn the fundamentals of building fast, modern websites using just HTML and CSS. No frameworks needed!">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            line-height: 1.8;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 60px 0 40px;
+        }
+
+        .back-link {
+            color: #4a9eff;
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 40px;
+            display: inline-block;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            line-height: 1.2;
+        }
+
+        .post-meta {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 40px;
+        }
+
+        .post-content {
+            color: #ccc;
+            margin-bottom: 60px;
+        }
+
+        .post-content h2 {
+            color: #ffffff;
+            font-size: 2rem;
+            margin: 40px 0 20px;
+            font-weight: 600;
+        }
+
+        .post-content h3 {
+            color: #ffffff;
+            font-size: 1.5rem;
+            margin: 30px 0 15px;
+            font-weight: 600;
+        }
+
+        .post-content p {
+            margin-bottom: 20px;
+        }
+
+        .post-content ul, .post-content ol {
+            margin: 20px 0 20px 30px;
+        }
+
+        .post-content li {
+            margin-bottom: 10px;
+        }
+
+        .post-content code {
+            background: #1a1a1a;
+            color: #4a9eff;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: #ccc;
+        }
+
+        .post-content strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .post-nav {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 0;
+            border-top: 1px solid #2a2a2a;
+            margin-bottom: 60px;
+        }
+
+        .post-nav a {
+            color: #4a9eff;
+            text-decoration: none;
+        }
+
+        .post-nav a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .post-content h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="/blog/" class="back-link">← Back to Blog</a>
+        </header>
+
+        <article>
+            <h1>Getting Started with Web Development</h1>
+            <div class="post-meta">January 19, 2025</div>
+
+            <div class="post-content">
+                <p>Welcome to the world of web development! In this post, I'll share my journey of building a blazing-fast website using just HTML and CSS, hosted on Cloudflare Workers.</p>
+
+                <h2>Why Simple is Better</h2>
+                
+                <p>When I started building my personal blog, I could have reached for React, Next.js, or any number of modern frameworks. Instead, I chose the simplest tools possible:</p>
+
+                <ul>
+                    <li><strong>Pure HTML</strong> for structure</li>
+                    <li><strong>Vanilla CSS</strong> for styling</li>
+                    <li><strong>Cloudflare Workers</strong> for hosting</li>
+                </ul>
+
+                <p>The result? A website that loads in under 50ms globally, with perfect Lighthouse scores.</p>
+
+                <h2>The Power of Constraints</h2>
+
+                <p>By limiting myself to just HTML and CSS, I discovered several benefits:</p>
+
+                <ol>
+                    <li><strong>Lightning Performance</strong>: No JavaScript bundles to download</li>
+                    <li><strong>Better SEO</strong>: Search engines love simple, semantic HTML</li>
+                    <li><strong>Easier Maintenance</strong>: Less complexity means fewer things can break</li>
+                    <li><strong>Learning Fundamentals</strong>: You truly understand how the web works</li>
+                </ol>
+
+                <h2>Key Lessons Learned</h2>
+
+                <h3>1. CSS is More Powerful Than You Think</h3>
+
+                <p>Modern CSS can handle animations, layouts, and even some interactivity without JavaScript:</p>
+
+                <pre><code>/* Dark mode with pure CSS */
+.hero-image {
+    filter: brightness(0.3);
+    transition: filter 1s ease-out;
+}
+
+.hero-image:hover {
+    filter: brightness(1);
+}</code></pre>
+
+                <h3>2. Performance Starts with HTML</h3>
+
+                <p>Using semantic HTML and proper image optimization can dramatically improve load times:</p>
+
+                <pre><code>&lt;picture&gt;
+    &lt;source type="image/webp" srcset="/hero.webp"&gt;
+    &lt;img src="/hero.jpg" alt="Description" loading="lazy"&gt;
+&lt;/picture&gt;</code></pre>
+
+                <h3>3. Cloudflare Workers are Amazing</h3>
+
+                <p>Deploying to the edge means your site loads fast everywhere in the world. No need for complex CDN setups.</p>
+
+                <h2>What's Next?</h2>
+
+                <p>I'm continuing to explore what's possible with minimal tooling. Next up:</p>
+                <ul>
+                    <li>Adding a simple HTML-based blog system</li>
+                    <li>Implementing navigation without JavaScript</li>
+                    <li>Creating interactive demos with CSS only</li>
+                </ul>
+
+                <h2>Conclusion</h2>
+
+                <p>You don't need complex frameworks to build great websites. Start simple, focus on fundamentals, and add complexity only when necessary.</p>
+
+                <p>Happy coding! 🚀</p>
+            </div>
+        </article>
+
+        <nav class="post-nav">
+            <span></span>
+            <a href="/blog/cloudflare-workers.html">Next: Deploying to Cloudflare Workers →</a>
+        </nav>
+    </div>
+</body>
+</html>

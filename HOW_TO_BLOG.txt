@@ -1,0 +1,42 @@
+HOW TO ADD A NEW BLOG POST
+=========================
+
+This is the simplest possible blog system - just HTML files!
+
+TO ADD A NEW POST:
+
+1. Copy the template:
+   cp public/blog/template.html public/blog/your-post-name.html
+
+2. Edit the new file:
+   - Update the <title> tag
+   - Update the <meta name="description"> tag
+   - Change the h1 title
+   - Add the date
+   - Write your content in HTML
+
+3. Update the blog index (public/blog/index.html):
+   - Copy one of the existing blog entry blocks
+   - Update the link, title, date, and excerpt
+   - Add it at the top of the list
+
+4. Update homepage (public/index.html):
+   - Add your post to the blog-grid section
+   - Remove the oldest post if you want to show only 3
+
+5. Update navigation in your post:
+   - Edit the "Previous" and "Next" links at the bottom
+   - Update the previous post to link to yours as "Next"
+
+6. Deploy:
+   wrangler deploy
+
+THAT'S IT!
+
+No build process, no dependencies, just HTML files.
+
+TIPS:
+- Keep post filenames simple: "my-post-title.html"
+- Use the same CSS styles as the template
+- Test locally by opening the HTML files in your browser
+- The blog will be as fast as possible - it's just HTML!

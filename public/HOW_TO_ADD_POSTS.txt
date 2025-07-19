@@ -1,0 +1,53 @@
+HOW TO ADD A NEW BLOG POST (HTML-Only Blog)
+==========================================
+
+This blog uses only HTML and CSS - no JavaScript, no build process, no dependencies.
+
+STEP 1: Create Your Post
+------------------------
+1. Copy /posts/template.html to /posts/YYYY-MM-DD-your-title.html
+2. Replace all placeholders:
+   - POST_TITLE → Your actual title
+   - POST_DESCRIPTION → Meta description for SEO
+   - YYYY-MM-DD → Today's date
+   - Month DD, YYYY → Human-readable date
+   - Add your content
+
+STEP 2: Update Navigation
+-------------------------
+1. Edit the PREVIOUS post to add "Next" link to your new post
+2. Update your new post's "Previous" link
+3. Remove "Next" link if it's the newest post
+
+STEP 3: Update Index Pages
+--------------------------
+1. Edit /index-simple.html:
+   - Add your new post at the top of the list
+   - Remove the oldest post if showing only 3
+
+2. Edit /blog.html:
+   - Add your new post at the top of the list
+   - Keep all posts here
+
+STEP 4: Deploy
+--------------
+Just run: wrangler publish
+
+TIPS
+----
+- Keep post filenames consistent: YYYY-MM-DD-url-friendly-title.html
+- Write your content directly in HTML
+- Use <p> for paragraphs, <h2> for sections
+- Code blocks go in <pre><code>...</code></pre>
+- Images can go in /public/ and reference with src="/image.jpg"
+- Test locally by opening HTML files in your browser
+
+EXAMPLE WORKFLOW
+----------------
+1. cp posts/template.html posts/2025-01-20-my-new-post.html
+2. Edit the new file with your content
+3. Update previous post's "Next" link
+4. Add to index-simple.html and blog.html
+5. wrangler publish
+
+That's it! No npm, no build, just HTML.

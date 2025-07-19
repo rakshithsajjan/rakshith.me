@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deploying to Cloudflare Workers - Rakshith Sajjan</title>
+    <meta name="description" content="How to deploy your static site to Cloudflare Workers for blazing fast global performance.">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><a href="/">Rakshith Sajjan</a></h1>
+            <p class="tagline">FAFO'ing around ;)</p>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/blog.html">Blog</a>
+            </nav>
+        </header>
+
+        <main>
+            <article>
+                <h1>Deploying to Cloudflare Workers</h1>
+                <div class="meta">
+                    <time datetime="2025-01-18">January 18, 2025</time>
+                </div>
+                
+                <p>Cloudflare Workers provides an excellent platform for hosting static sites. With edge locations around the world, your site loads fast no matter where your visitors are located.</p>
+
+                <h2>Why Cloudflare Workers?</h2>
+                
+                <p>Traditional hosting serves your site from a single location. If your server is in the US and your visitor is in Japan, they experience latency. Cloudflare Workers solves this by running your code at the edge - close to your users.</p>
+                
+                <ul>
+                    <li>Global edge network with 200+ locations</li>
+                    <li>Generous free tier (100,000 requests/day)</li>
+                    <li>Built-in DDoS protection</li>
+                    <li>Automatic SSL certificates</li>
+                    <li>Simple deployment with Wrangler CLI</li>
+                </ul>
+
+                <h2>Setting Up Your Worker</h2>
+                
+                <p>First, create a simple worker script that serves your static files:</p>
+                
+                <pre><code>export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    let pathname = url.pathname;
+    
+    if (pathname === '/') {
+      pathname = '/index.html';
+    }
+    
+    // Serve static files
+    return env.ASSETS.fetch(request);
+  }
+};</code></pre>
+
+                <h2>Configuration with wrangler.toml</h2>
+                
+                <p>Create a wrangler.toml file in your project root:</p>
+                
+                <pre><code>name = "my-blog"
+main = "worker.js"
+compatibility_date = "2025-01-18"
+
+[site]
+bucket = "./public"</code></pre>
+
+                <h2>Deployment</h2>
+                
+                <p>With Wrangler CLI installed, deployment is a single command:</p>
+                
+                <pre><code>wrangler publish</code></pre>
+
+                <p>That's it! Your site is now live on Cloudflare's global network. You'll get a workers.dev subdomain, or you can connect your own domain.</p>
+
+                <h2>Performance Benefits</h2>
+                
+                <p>Since our blog is just HTML and CSS, it's incredibly fast. Combined with Cloudflare's edge network:</p>
+                
+                <ol>
+                    <li>First byte times under 50ms globally</li>
+                    <li>No server-side rendering delays</li>
+                    <li>Automatic caching at the edge</li>
+                    <li>Zero cold starts (unlike serverless functions)</li>
+                </ol>
+
+                <p>The simplicity of static files plus the power of edge computing creates an unbeatable combination for performance.</p>
+            </article>
+
+            <nav class="post-nav">
+                <a href="/posts/2025-01-17-dark-mode.html">← Previous: Building a Dark Mode Blog</a>
+                <a href="/posts/2025-01-19-getting-started.html">Next: Getting Started →</a>
+            </nav>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Rakshith Sajjan. Built with HTML & CSS.</p>
+        </footer>
+    </div>
+</body>
+</html>
