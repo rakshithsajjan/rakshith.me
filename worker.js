@@ -139,7 +139,7 @@ function getCacheControl(pathname) {
   if (pathname.endsWith('.html') || pathname === '/') {
     return {
       browserTTL: 0,
-      edgeTTL: 60, // 1 minute edge cache
+      edgeTTL: 5, // 5 seconds edge cache
       header: 'no-cache, must-revalidate'
     };
   }
